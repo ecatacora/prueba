@@ -7,7 +7,8 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd       
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
@@ -15,19 +16,46 @@
 
     <!-- <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
     <mvc:annotation-driven /> -->
+    
+    
 
     <context:annotation-config/>
     <context:component-scan base-package="pucp.sw2.horario1.vtesis"/>    
 
     <tx:annotation-driven />
-        
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    
+    <bean
+        class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <bean class="pucp.sw2.horario1.vtesis.controllers.FileUploadController">
+        <property name="formView" value="FileUploadForm" />
+        <property name="successView" value="FileUploadSuccess" />
+
+        <!-- Map a validator -->
+        <property name="validator">
+            <bean class="pucp.sw2.horario1.vtesis.common.FileUploadValidator" />
+        </property>
+    </bean>
+    
+    <!-- Register the Customer.properties -->
+    
+    <bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="message" />
+    </bean>
+    
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
 	
     <bean name="indexController"
           class="org.springframework.web.servlet.mvc.ParameterizableViewController"
-          p:viewName="index" />    
+          p:viewName="index" />  
     
+      
+   
 </beans>
